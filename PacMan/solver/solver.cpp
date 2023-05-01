@@ -1,7 +1,6 @@
 #include "solver.h"
 
 #include <queue>
-#include <unordered_set>
 
 Solver::Solver(Matrix& matrix, Pacman& pacman)
     : num_steps_(0),
@@ -25,6 +24,11 @@ void Solver::solve() {
     }
     num_steps_++;
   }
+}
+
+void Solver::visit(Node node){
+  auto [i,j]= node;
+  visited[{i,j}]= true;
 }
 
 void Solver::print_solution() {

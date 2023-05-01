@@ -2,7 +2,7 @@
 #define MATRIX_H
 
 #include <vector>
-#include "node.h"
+#include "../node.h"
 
 class Matrix {
     int n_;
