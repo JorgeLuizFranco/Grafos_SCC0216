@@ -6,7 +6,12 @@
 #include <stdexcept>
 #include <algorithm>
 #include <utility>
-#include "node.h"
+
+typedef struct Node
+{
+    int i;
+    int j;
+} No;
 
 
 class Grafo {
