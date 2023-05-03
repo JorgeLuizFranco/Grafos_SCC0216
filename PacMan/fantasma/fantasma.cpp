@@ -24,6 +24,9 @@ Node Fantasma::direction_to_node(char dir) {
  }
 
 void Fantasma::update_position() {
+    
+    if(directions.empty()) return;
+
     char direction = directions.front();
     directions.pop();
 
