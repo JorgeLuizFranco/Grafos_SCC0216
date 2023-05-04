@@ -13,7 +13,7 @@ public:
     void read_input();
     void print_matrix();
     int get_element(Node node);
-    bool is_in_limits(Node node) const;
+    bool is_in_limits(Node* node) const;
 };
 
 #endif // MATRIX_H

@@ -1,21 +1,24 @@
 CXX=g++
-CXXFLAGS=-Wall -Wextra -Werror -std=c++11
+CXXFLAGS=-Wall -Wextra -Werror -std=c++17
 EXEC=programa
 OBJS=grafo.o main.o
 
-all: $(EXEC)
+SRC_FOLDER=src
+BUILD_FOLDER=build
 
-$(EXEC): $(OBJS)
-	$(CXX) $(CXXFLAGS) $^ -o $@
+SRC_FILES=$(wildcard $(SRC_FOLDER)/*.cpp) $(wildcard $(SRC_FOLDER)/**/*.cpp)
 
-grafo.o: grafo.cpp grafo.h
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+OBJ_FOLDER=$(BUILD_FOLDER)/obj
+OBJ_FILES=$(patsubst $(SRC_FOLDER)/%.cpp, $(OBJ_FOLDER)/%.o, $(SRC_FILES))
 
-main.o: main.cpp grafo.h
+CXXFLAGS+= -I$(SRC_FOLDER)
+
+all : $(OBJ_FILES)
+	$(CXX) $(CXXFLAGS) $(OBJ_FILES) -o $(EXEC)
+
+$(OBJ_FOLDER)/%.o : $(SRC_FOLDER)/%.cpp
+	mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(OBJS) $(EXEC)
-
-run:
-	./programa
+	rm -rf $(BUILD_FOLDER)

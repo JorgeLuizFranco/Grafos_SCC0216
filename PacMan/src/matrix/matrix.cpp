@@ -24,7 +24,7 @@ int Matrix::get_element(Node node){
     return grid_[node.i][node.j];
 }
 
-bool Matrix::is_in_limits(Node node) const {
-    return node.i >= 0 && node.i < n_ && node.j >= 0 && node.j < n_;
+bool Matrix::is_in_limits(Node* node) const {
+    return node->i >= 0 && node->i < n_ && node->j >= 0 && node->j < n_;
 }
 

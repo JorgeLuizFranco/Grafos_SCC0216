@@ -13,7 +13,7 @@ int main() {
     // Iterate over the matrix using get_element()
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
-            std::cout << matrix.get_element(i, j) << " ";
+            std::cout << matrix.get_element({i, j}) << " ";
         }
         std::cout << std::endl;
     }

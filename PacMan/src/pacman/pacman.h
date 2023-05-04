@@ -7,10 +7,10 @@
 
 class Pacman {
  public:
-  Node start_node;
+  Node* start_node;
 
-  Pacman(Node node);
-  std::vector<Node> get_adjacent_nodes(Node current_node);
+  Pacman(Node* node);
+  std::vector<Node*> get_adjacent_nodes(Node* current_node);
   
 };
 

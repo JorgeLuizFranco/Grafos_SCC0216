@@ -8,11 +8,11 @@
 
 class Fantasma {
  public:
-  Node start_node;
-  Node current_node;
+  Node* start_node;
+  Node* current_node;
   std::queue<char> directions;
 
-  Fantasma(Node node);
+  Fantasma(Node* node);
   void insert_direction(char direction);
   void update_position();
 

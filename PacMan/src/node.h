@@ -35,8 +35,10 @@ typedef struct Node {
 
 // Define the std::get function for Node
 template <std::size_t N>
-int get(const Node& node) {
+int get(const Node node) {
     return node.get<N>();
 }
+
+
 
 #endif // NODE_H
