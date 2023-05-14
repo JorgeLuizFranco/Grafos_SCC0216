@@ -1,4 +1,7 @@
 #include "matrix/matrix.h"
+#include "pacman/pacman.h"
+#include "solver/solver.h"
+#include "fantasma/fantasma.h"
 #include <iostream>
 
 
@@ -8,15 +11,20 @@ int main() {
 
     Matrix matrix(n);
     matrix.read_input();
-    matrix.print_matrix();
+    
+    int a,b;
+    std::cin>>a>>b;
+    Node node_pacman= Node(a,b);
+    Pacman pacman= Pacman(&node_pacman);
 
-    // Iterate over the matrix using get_element()
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            std::cout << matrix.get_element({i, j}) << " ";
-        }
-        std::cout << std::endl;
-    }
+    std::cin>>a>>b;
+    Node node_fantasma= Node(a,b);
+    Fantasma fantasma= Fantasma(&node_fantasma);
 
+    Solver solver= Solver(&matrix,&pacman,&fantasma);
+
+    solver.solve();
+    
+    solver.print_solution();
     return 0;
 }

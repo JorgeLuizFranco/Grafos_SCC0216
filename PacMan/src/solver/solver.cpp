@@ -1,4 +1,5 @@
 #include "solver.h"
+#include <stdio.h>
 #include <queue>
 
 Solver::Solver(Matrix *matrix_, Pacman *pacman_, Fantasma *fantasma_)
@@ -60,6 +61,11 @@ void Solver::print_solution() {
   }
 
   update_moves();
+
+  printf("Número de passos: %d\nMovimentos para cima: %d\nMovimentos para baixo: %d\nMovimentos para esquerda: %d\nMovimentos para direita: %d\n",num_steps_, moves_up_,
+  moves_down_,
+  moves_left_,
+  moves_right_);
 }
 
 bool Solver::is_visited(Node *node) {
