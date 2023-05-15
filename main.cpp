@@ -57,8 +57,7 @@ bool is_in_limits(pii node, int n) {
   return i >= 0 && i < n && j >= 0 && j < n;
 }
 
-vector<pii> cria_posicoes_fantasma(const vector<char> &movimentos_fantasma,
-                                   pii inicio_fantasma) {
+vector<pii> cria_posicoes_fantasma(const vector<char> &movimentos_fantasma, pii inicio_fantasma, int n) {
   vector<pii> posicoes_fantasma;
 
   pii posicao_atual = inicio_fantasma;
@@ -66,16 +65,16 @@ vector<pii> cria_posicoes_fantasma(const vector<char> &movimentos_fantasma,
 
   for (char direcao : movimentos_fantasma) {
     switch (direcao) {
-      case 'L':
-        posicao_atual = {posicao_atual.first, posicao_atual.second - 1};
+      case 'L': if (posicao_atual.second>0)
+                  posicao_atual = {posicao_atual.first, posicao_atual.second - 1};
         break;
-      case 'R':
-        posicao_atual = {posicao_atual.first, posicao_atual.second + 1};
+      case 'R': if (posicao_atual.second<n-1)
+                  posicao_atual = {posicao_atual.first, posicao_atual.second + 1};
         break;
-      case 'U':
-        posicao_atual = {posicao_atual.first - 1, posicao_atual.second};
+      case 'U': if (posicao_atual.first>0)
+                  posicao_atual = {posicao_atual.first - 1, posicao_atual.second};
         break;
-      case 'D':
+      case 'D': if (posicao_atual.first<n-1)
         posicao_atual = {posicao_atual.first + 1, posicao_atual.second};
         break;
     }
@@ -110,7 +109,7 @@ void solve(const vector<vector<int>> &grid,
            const vector<char> &movimentos_fantasma, pii inicio_fantasma,
            pii inicio_pacman, int n) {
   vector<pii> posicoes_fantasma =
-      cria_posicoes_fantasma(movimentos_fantasma, inicio_fantasma);
+      cria_posicoes_fantasma(movimentos_fantasma, inicio_fantasma, n);
 
   vector<vector<int>> dist(n, vector<int>(n, -1));
   vector<vector<pii>> parent(n, vector<pii>(n, pii(-1, -1)));
@@ -125,7 +124,7 @@ void solve(const vector<vector<int>> &grid,
   for (int i = 0; i < n_posicoes; i++) {
     auto [x, y] = posicoes_fantasma[i];
     if (dist[x][y] <= i and min_dist > dist[x][y] and dist[x][y]!=-1) {
-      cout<< min_pos.first<< ' '<<min_pos.second<<endl;
+      //cout<< min_pos.first<< ' '<<min_pos.second<<endl;
       min_dist = dist[x][y];
       min_pos = {x, y};
     }
