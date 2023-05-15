@@ -120,11 +120,9 @@ void solve(const vector<vector<int>> &grid,
   int min_dist = n * n + 2;
   pii min_pos;
   int n_posicoes= posicoes_fantasma.size();
-  //cout<< posicoes_fantasma.size()<<endl;
   for (int i = 0; i < n_posicoes; i++) {
     auto [x, y] = posicoes_fantasma[i];
     if (dist[x][y] <= i and min_dist > dist[x][y] and dist[x][y]!=-1) {
-      //cout<< min_pos.first<< ' '<<min_pos.second<<endl;
       min_dist = dist[x][y];
       min_pos = {x, y};
     }
