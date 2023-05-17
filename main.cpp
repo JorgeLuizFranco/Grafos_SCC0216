@@ -1,4 +1,11 @@
-//#include <bits/stdc++.h>
+
+/**
+ * TRABALHO 2 DE GRAFOS - PACMAN
+ * 
+ * ARTHUR QUEIROZ MOURA - 13671532
+ * JORGE LUIZ FRANCO - 13695091 
+*/
+
 #include <vector>
 #include <utility>
 #include <iostream>
@@ -9,24 +16,53 @@ using namespace std;
 using pii = pair<int, int>;
 
 void update_move(pii mov_son, pii mov_parent, int &num_steps_, int &moves_up_,
-                 int &moves_down_, int &moves_left_, int &moves_right_) {
-  auto [i1, j1] = mov_son;
-  auto [i2, j2] = mov_parent;
-  int di = i2 - i1;
-  int dj = j2 - j1;
+                 int &moves_down_, int &moves_left_, int &moves_right_);
 
-  if (di == 1) {
-    moves_up_++;
-  } else if (di == -1) {
-    moves_down_++;
-  } else if (dj == 1) {
-    moves_left_++;
-  } else if (dj == -1) {
-    moves_right_++;
+void print_solution(const vector<vector<pii>> &parent, pii node_solution);
+
+vector<pii> vizinhos(pii no_atual);
+
+bool is_in_limits(pii node, int n)
+
+void update_move(pii mov_son, pii mov_parent, int &num_steps_, int &moves_up_,
+                 int &moves_down_, int &moves_left_, int &moves_right_);
+
+void bfs_queue(const vector<vector<int>> &grid, vector<vector<int>> &dist,
+               vector<vector<pii>> &parent, pii inicio_pacman, int n);
+
+void solve(const vector<vector<int>> &grid,
+           const vector<char> &movimentos_fantasma, pii inicio_fantasma,
+           pii inicio_pacman, int n);
+
+int main() {
+  int n, m;
+  cin >> n;
+
+  pii inicio_fantasma, inicio_pacman;
+  vector<char> movimentos_fantasma;
+  vector<vector<int>> grid(n, vector<int>(n, 0));  // inicializo o vetor de grid
+
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j < n; j++) {
+      cin >> grid[i][j];
+    }
   }
 
-  num_steps_++;
+  cin >> inicio_pacman.first >> inicio_pacman.second;
+  cin >> inicio_fantasma.first >> inicio_fantasma.second;
+
+  cin >> m;
+  while (m--) {
+    char direcao;
+    cin >> direcao;
+    movimentos_fantasma.push_back(direcao);
+  }
+
+  solve(grid, movimentos_fantasma, inicio_fantasma, inicio_pacman, n);
+
+  return 0;
 }
+
 
 void print_solution(const vector<vector<pii>> &parent, pii node_solution) {
   int numero_passos = 0, movimentos_cima = 0, movimentos_baixo = 0,
@@ -144,31 +180,22 @@ void solve(const vector<vector<int>> &grid,
   print_solution(parent,min_pos);
 }
 
-int main() {
-  int n, m;
-  cin >> n;
+void update_move(pii mov_son, pii mov_parent, int &num_steps_, int &moves_up_,
+                 int &moves_down_, int &moves_left_, int &moves_right_) {
+  auto [i1, j1] = mov_son;
+  auto [i2, j2] = mov_parent;
+  int di = i2 - i1;
+  int dj = j2 - j1;
 
-  pii inicio_fantasma, inicio_pacman;
-  vector<char> movimentos_fantasma;
-  vector<vector<int>> grid(n, vector<int>(n, 0));  // inicializo o vetor de grid
-
-  for (int i = 0; i < n; i++) {
-    for (int j = 0; j < n; j++) {
-      cin >> grid[i][j];
-    }
+  if (di == 1) {
+    moves_up_++;
+  } else if (di == -1) {
+    moves_down_++;
+  } else if (dj == 1) {
+    moves_left_++;
+  } else if (dj == -1) {
+    moves_right_++;
   }
 
-  cin >> inicio_pacman.first >> inicio_pacman.second;
-  cin >> inicio_fantasma.first >> inicio_fantasma.second;
-
-  cin >> m;
-  while (m--) {
-    char direcao;
-    cin >> direcao;
-    movimentos_fantasma.push_back(direcao);
-  }
-
-  solve(grid, movimentos_fantasma, inicio_fantasma, inicio_pacman, n);
-
-  return 0;
+  num_steps_++;
 }
