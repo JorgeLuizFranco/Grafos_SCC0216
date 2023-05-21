@@ -1,7 +1,7 @@
 CXX=g++
 CXXFLAGS=-Wall -Wextra -Werror -std=c++17
 EXEC=programa
-OBJS=grafo.o main.o
+OBJS=main.o
 
 SRC_FOLDER=src
 BUILD_FOLDER=build
@@ -22,3 +22,9 @@ $(OBJ_FOLDER)/%.o : $(SRC_FOLDER)/%.cpp
 
 clean:
 	rm -rf $(BUILD_FOLDER)
+
+run:
+	./programa
+
+zip:
+	zip -r PacMan.zip src/ Makefile 
