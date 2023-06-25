@@ -1,75 +1,36 @@
+/**
+ * TRABALHO 4 DE GRAFOS - TRANSPORTE DE COMPUTADORES
+ *
+ * ARTHUR QUEIROZ MOURA - 13671532
+ * JORGE LUIZ FRANCO - 13695091
+ */
+
+#include "cost-computer.h"
 #include <iostream>
-#include <vector>
-#include <queue>
-#include <utility>
 
-using namespace std;
+void read_input(int& num_nodes, int& num_edges, int& city_pedro,
+                vector<vector<pair<int, int>>>& graph);
 
-const int INF = 1e9;
-
-void dijkstra(const vector<vector<pair<int, int>>>& graph, int start, vector<int>& dist, vector<int>& prev, int num_nodes) {
-    vector<bool> processed(num_nodes, false);
-    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
-
-    dist[start] = 0;
-    pq.push({0, start});
-
-    while (!pq.empty()) {
-        int u = pq.top().second;
-        pq.pop();
-
-        if (processed[u])
-            continue;
-
-        processed[u] = true;
-
-        for (auto& neighbor : graph[u]) {
-            auto [v, weight] = neighbor;
-
-            if (!processed[v] && dist[u] + weight < dist[v]) {
-                dist[v] = dist[u] + weight;
-                prev[v] = u;
-                pq.push({dist[v], v});
-            }
-        }
-    }
-}
-
-int calculateDeliveryCostPadrao(const vector<vector<pair<int, int>>>& graph, int num_nodes) {
-    vector<int> dist(num_nodes, INF);
-    vector<int> prev(num_nodes, -1);
-    dijkstra(graph, 0, dist, prev, num_nodes);
-
-    int delivery_padrao_cost = 0;
-
-    for (int i = 1; i < num_nodes; i++) { // Pulando nó de início (source=0)
-        delivery_padrao_cost += (dist[i] - dist[prev[i]]); // Distancia ao nó i menos a distancia para o anterior
-    }
-
-    return delivery_padrao_cost - 1;
-}
-
-int calculateDeliveryCostVip(const vector<vector<pair<int, int>>>& graph, int num_nodes, int city_pedro) {
-    vector<int> dist(num_nodes, INF);
-    vector<int> prev(num_nodes, -1); // prev[source=0] sempre será -1
-    dijkstra(graph, 0, dist, prev, num_nodes);
-
-    int current_node = city_pedro;
-    int num_cities_in_path = 0;
-
-    while (prev[current_node] != -1) {
-        current_node = prev[current_node];
-        ++num_cities_in_path;
-    }
-
-    return dist[city_pedro] * (num_nodes - num_cities_in_path - 1);
-}
+void print_best_option(int num_nodes, int city_pedro, vector<vector<pair<int, int>>>& graph);
 
 int main() {
     int num_nodes, num_edges, city_pedro;
+    // graph[a] is a vector of pairs. { [...], {neig_i, w_i}, [...] } indicates that neig_i is a
+    // neigbor of 'a' and the edge from 'a' to neig_i has weight w_i
+    vector<vector<pair<int, int>>> graph;
+
+    read_input(num_nodes, num_edges, city_pedro, graph);
+
+    print_best_option(num_nodes, city_pedro, graph);
+
+    return 0;
+}
+
+void read_input(int& num_nodes, int& num_edges, int& city_pedro,
+                vector<vector<pair<int, int>>>& graph) {
     cin >> num_nodes >> num_edges;
 
-    vector<vector<pair<int, int>>> graph(num_nodes);
+    graph.resize(num_nodes, vector<pair<int, int>>()); // num_nodes empty pair<int, int> vectors
 
     for (int i = 0; i < num_edges; i++) {
         int a, b, w;
@@ -79,9 +40,11 @@ int main() {
     }
 
     cin >> city_pedro;
+}
 
+void print_best_option(int num_nodes, int city_pedro, vector<vector<pair<int, int>>>& graph) {
     // Calculate delivery costs
-    int delivery_padrao_cost = calculateDeliveryCostPadrao(graph, num_nodes);
+    int delivery_padrao_cost = calculateDeliveryStandardCost(graph, num_nodes);
     int delivery_vip_cost = calculateDeliveryCostVip(graph, num_nodes, city_pedro);
 
     // Determine the best option
@@ -102,6 +65,4 @@ int main() {
     // Output the result
     cout << best_option << endl;
     cout << best_cost << endl;
-
-    return 0;
 }
