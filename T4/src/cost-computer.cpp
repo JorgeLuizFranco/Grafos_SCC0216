@@ -39,10 +39,7 @@ void dijkstra(const vector<vector<pair<int, int>>>& graph, int start, vector<int
 
 // given the graph, it sets up the distance and previous vectors and runs dijkstra's algorithm using
 // the function above. Then it finds the cost of a standard delievery
-int calculateDeliveryStandardCost(const vector<vector<pair<int, int>>>& graph, int num_nodes) {
-    vector<int> dist(num_nodes, INF);
-    vector<int> prev(num_nodes, -1);
-    dijkstra(graph, 0, dist, prev, num_nodes);
+int calculateDeliveryStandardCost(const vector<int>& prev, vector<int>& dist, int num_nodes) {
 
     int delivery_padrao_cost = 0;
 
@@ -53,19 +50,35 @@ int calculateDeliveryStandardCost(const vector<vector<pair<int, int>>>& graph, i
     return delivery_padrao_cost - 1;
 }
 
-int calculateDeliveryCostVip(const vector<vector<pair<int, int>>>& graph, int num_nodes,
-                             int city_pedro) {
-    vector<int> dist(num_nodes, INF);
-    vector<int> prev(num_nodes, -1); // prev[source=0] will always be -1
-    dijkstra(graph, 0, dist, prev, num_nodes);
+int calculateDeliveryCostVip(const vector<int>& prev, vector<int>& dist, int city_pedro, int num_nodes) {
 
     int current_node = city_pedro;
     int num_cities_in_path = 0;
-
+    
     while (prev[current_node] != -1) {
         current_node = prev[current_node]; // backtracking to initial city
+        
         ++num_cities_in_path;
     }
+    
 
     return dist[city_pedro] * (num_nodes - num_cities_in_path - 1);
+}
+
+pair<int,int> calculateDeliveryCosts(const vector<vector<pair<int, int>>>& graph, int num_nodes,
+                             int city_pedro){
+    
+    vector<int> dist(num_nodes, INF);
+    vector<int> prev(num_nodes+1, -1); // prev[source=0] will always be -1
+    
+    
+    dijkstra(graph, 0, dist, prev, num_nodes);
+    
+    int delivery_standard_cost = calculateDeliveryStandardCost(prev,dist, num_nodes);
+    
+    int delivery_vip_cost = calculateDeliveryCostVip(prev, dist, city_pedro, num_nodes);
+
+    return {delivery_standard_cost,delivery_vip_cost};
+
+
 }

@@ -44,8 +44,9 @@ void read_input(int& num_nodes, int& num_edges, int& city_pedro,
 
 void print_best_option(int num_nodes, int city_pedro, vector<vector<pair<int, int>>>& graph) {
     // Calculate delivery costs
-    int delivery_padrao_cost = calculateDeliveryStandardCost(graph, num_nodes);
-    int delivery_vip_cost = calculateDeliveryCostVip(graph, num_nodes, city_pedro);
+    
+
+    auto [delivery_padrao_cost, delivery_vip_cost] = calculateDeliveryCosts(graph,num_nodes,city_pedro);
 
     // Determine the best option
     string best_option;
