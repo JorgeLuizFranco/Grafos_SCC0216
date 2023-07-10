@@ -1,4 +1,6 @@
 #include "cost-computer.h"
+#include "union_find.h"
+#include <algorithm>
 
 const int INF = 1e9;
 
@@ -39,15 +41,27 @@ void dijkstra(const vector<vector<pair<int, int>>>& graph, int start, vector<int
 
 // given the graph, it sets up the distance and previous vectors and runs dijkstra's algorithm using
 // the function above. Then it finds the cost of a standard delievery
-int calculateDeliveryStandardCost(const vector<int>& prev, vector<int>& dist, int num_nodes) {
+int calculateDeliveryStandardCost(vector<tuple<int,int,int>>& edges, int num_nodes) {
 
     int delivery_padrao_cost = 0;
 
-    for (int i = 1; i < num_nodes; i++) { // Starting node is the source=0, so it is ignored
-        delivery_padrao_cost += (dist[i] - dist[prev[i]]); // Distance from node prev[i] to node i
+    UnionFind uf(num_nodes);
+
+    sort(edges.begin(),edges.end());
+
+
+    for( auto [w, u, v]: edges){
+
+        if(not uf.isConnected(u,v)){
+
+            delivery_padrao_cost+= w;
+
+            uf.unite(u,v);
+        }
     }
 
-    return delivery_padrao_cost - 1;
+
+    return delivery_padrao_cost;
 }
 
 int calculateDeliveryCostVip(const vector<int>& prev, vector<int>& dist, int city_pedro, int num_nodes) {
@@ -66,7 +80,7 @@ int calculateDeliveryCostVip(const vector<int>& prev, vector<int>& dist, int cit
 }
 
 pair<int,int> calculateDeliveryCosts(const vector<vector<pair<int, int>>>& graph, int num_nodes,
-                             int city_pedro){
+                             int city_pedro, vector<tuple<int,int,int>>& edges){
     
     vector<int> dist(num_nodes, INF);
     vector<int> prev(num_nodes+1, -1); // prev[source=0] will always be -1
@@ -74,7 +88,7 @@ pair<int,int> calculateDeliveryCosts(const vector<vector<pair<int, int>>>& graph
     
     dijkstra(graph, 0, dist, prev, num_nodes);
     
-    int delivery_standard_cost = calculateDeliveryStandardCost(prev,dist, num_nodes);
+    int delivery_standard_cost = calculateDeliveryStandardCost(edges, num_nodes);
     
     int delivery_vip_cost = calculateDeliveryCostVip(prev, dist, city_pedro, num_nodes);
 

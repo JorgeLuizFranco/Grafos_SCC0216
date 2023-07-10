@@ -8,26 +8,28 @@
 #include "cost-computer.h"
 #include <iostream>
 
-void read_input(int& num_nodes, int& num_edges, int& city_pedro,
-                vector<vector<pair<int, int>>>& graph);
 
-void print_best_option(int num_nodes, int city_pedro, vector<vector<pair<int, int>>>& graph);
+void read_input(int& num_nodes, int& num_edges, int& city_pedro,
+                vector<vector<pair<int, int>>>& graph, vector<tuple<int,int,int>>& edges);
+
+void print_best_option(int num_nodes, int city_pedro, vector<vector<pair<int, int>>>& graph, vector<tuple<int,int,int>>& edges);
 
 int main() {
     int num_nodes, num_edges, city_pedro;
     // graph[a] is a vector of pairs. { [...], {neig_i, w_i}, [...] } indicates that neig_i is a
     // neigbor of 'a' and the edge from 'a' to neig_i has weight w_i
     vector<vector<pair<int, int>>> graph;
+    vector<tuple<int,int,int>> edges;
 
-    read_input(num_nodes, num_edges, city_pedro, graph);
+    read_input(num_nodes, num_edges, city_pedro, graph,edges);
 
-    print_best_option(num_nodes, city_pedro, graph);
+    print_best_option(num_nodes, city_pedro, graph,edges);
 
     return 0;
 }
 
 void read_input(int& num_nodes, int& num_edges, int& city_pedro,
-                vector<vector<pair<int, int>>>& graph) {
+                vector<vector<pair<int, int>>>& graph, vector<tuple<int,int,int>>& edges) {
     cin >> num_nodes >> num_edges;
 
     graph.resize(num_nodes, vector<pair<int, int>>()); // num_nodes empty pair<int, int> vectors
@@ -37,16 +39,17 @@ void read_input(int& num_nodes, int& num_edges, int& city_pedro,
         cin >> a >> b >> w;
         graph[a].push_back({b, w});
         graph[b].push_back({a, w});
+        edges.push_back({w,a,b});
     }
 
     cin >> city_pedro;
 }
 
-void print_best_option(int num_nodes, int city_pedro, vector<vector<pair<int, int>>>& graph) {
+void print_best_option(int num_nodes, int city_pedro, vector<vector<pair<int, int>>>& graph, vector<tuple<int,int,int>>& edges) {
     // Calculate delivery costs
     
 
-    auto [delivery_padrao_cost, delivery_vip_cost] = calculateDeliveryCosts(graph,num_nodes,city_pedro);
+    auto [delivery_padrao_cost, delivery_vip_cost] = calculateDeliveryCosts(graph,num_nodes,city_pedro,edges);
 
     // Determine the best option
     string best_option;
